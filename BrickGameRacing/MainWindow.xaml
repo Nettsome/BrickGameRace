@@ -5,8 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BrickGameRacing"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Formula One" Height="708" Width="398">
+    <Window.Resources>
+        <local:CellTypeConverter x:Key="cellTypeConverter" />
+    </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
 
+        <ItemsControl Grid.Row="0" Grid.Column="0" x:Name="GameElems" SizeChanged="GameElems_SizeChanged" Margin="4">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas IsItemsHost="True" Background="WhiteSmoke"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <DataTemplate.Resources>
+                        <Style TargetType="Rectangle">
+                            <Setter Property="Fill" Value="{Binding Path=Type, Converter={StaticResource cellTypeConverter}}"/>
+                            <Setter Property="Stroke" Value="Gray"/>
+                            <Setter Property="Margin" Value="{Binding Path=Margin}"/>
+                            <Setter Property="Width" Value="{Binding Path=Size}"/>
+                            <Setter Property="Height" Value="{Binding Path=Size}"/>
+                        </Style>
+                    </DataTemplate.Resources>
+                    <Rectangle />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </Window>

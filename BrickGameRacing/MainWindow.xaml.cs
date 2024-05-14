@@ -1,13 +1,6 @@
 ﻿using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace BrickGameRacing
 {
@@ -16,9 +9,21 @@ namespace BrickGameRacing
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly GameViewModel _viewModel;
         public MainWindow()
         {
+            _viewModel = new();
+
             InitializeComponent();
+
+            DataContext = _viewModel;
+            GameElems.ItemsSource = _viewModel.Field;
+        }
+
+        private void GameElems_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            _viewModel.Field.Width = (int)e.NewSize.Width;
+            _viewModel.Field.Height = (int)e.NewSize.Height;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Windows.Data;
 using System.Windows;
 using System.Windows.Media;
+using BrickGameRacing.Models.Cells;
 
 namespace BrickGameRacing;
 

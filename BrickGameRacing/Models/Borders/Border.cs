@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrickGameRacing
+namespace BrickGameRacing.Models.Borders;
+
+public class Border
 {
-    internal class GameLogic
-    {
-    }
+
 }

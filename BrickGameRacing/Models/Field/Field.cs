@@ -6,11 +6,19 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using BrickGameRacing.Models.Cells;
 
-namespace BrickGameRacing;
+namespace BrickGameRacing.Models.Field;
 
 public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyChanged
 {
+    //      Axes:
+    //      * ————————––——→
+    //      |
+    //      |
+    //      |
+    //      ↓
+
     private int _width;
     private int _height;
 

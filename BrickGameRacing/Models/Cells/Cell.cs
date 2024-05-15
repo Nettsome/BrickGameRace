@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BrickGameRacing;
+namespace BrickGameRacing.Models.Cells;
 
 public class Cell(ushort row, ushort col, CellType type = CellType.Empty)
 {
-    public ushort Row {  get => row; set => row = value; }
+    public ushort Row { get => row; set => row = value; }
     public ushort Col { get => col; set => col = value; }
     public CellType Type { get => type; set => type = value; }
     public static bool IsActiveField { get; set; } = false;
@@ -27,6 +27,11 @@ public class Cell(ushort row, ushort col, CellType type = CellType.Empty)
     public override int GetHashCode()
     {
         return HashCode.Combine(Row.GetHashCode(), Col.GetHashCode());
+    }
+
+    public void ChangePosition(ushort row, ushort col)
+    {
+
     }
 }
 

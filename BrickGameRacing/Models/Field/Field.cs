@@ -6,18 +6,15 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using BrickGameRacing.Models.Cells;
 
 namespace BrickGameRacing.Models.Field;
 
 public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyChanged
 {
-    //      Axes:
-    //      * ————————––——→
-    //      |
-    //      |
-    //      |
-    //      ↓
+    public Borders leftborder;
+    public Borders rightborder;
 
     private int _width;
     private int _height;
@@ -74,6 +71,12 @@ public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyCh
     public Field(ushort rows = 20, ushort cols = 10)
     {
         Reset(rows, cols);
+
+        leftborder = new(rows, 0);
+        rightborder = new(rows, (ushort)(cols - 1));
+
+        ChangeCells(leftborder.Walls.ToList());
+        ChangeCells(rightborder.Walls.ToList());
     }
 
     public event NotifyCollectionChangedEventHandler? CollectionChanged;
@@ -101,7 +104,7 @@ public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyCh
     {
         if (Height > 0 && Width > 0)
         {
-            foreach (var cell in this)                          // cell = CellInfo
+            foreach (var cell in this)                          
             {
                 cell.Left = CellSize * cell.Col + LShift;
                 cell.Top = CellSize * cell.Row + TShift;
@@ -120,6 +123,12 @@ public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyCh
         CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
 
+    public void Move()
+    {
+        ChangeCells(leftborder.Move());
+        ChangeCells(rightborder.Move());
+    }
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -127,7 +136,7 @@ public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyCh
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    // Зачем нужен этот SetField
+    // Зачем нужен этот SetField?
     protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {
         if (EqualityComparer<T>.Default.Equals(field, value)) return false;

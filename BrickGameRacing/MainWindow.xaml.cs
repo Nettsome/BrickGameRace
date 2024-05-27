@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using BrickGameRacing.Models.Cells;
 using BrickGameRacing.VievModels;
 
 
@@ -25,6 +26,8 @@ namespace BrickGameRacing
 
             DataContext = _viewModel;
             GameElems.ItemsSource = _viewModel.Field;
+
+            //TheCanvas.Resources =  List<int> { 1, 2, 1, 3, 4, 5 };
         }
 
         private void GameElems_SizeChanged(object sender, SizeChangedEventArgs e)

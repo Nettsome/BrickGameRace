@@ -50,7 +50,6 @@ public class GameLogic(Field field)
 
     private void UpdateField(List<Cell> cells)
     {
-                field.ChangeCells(cells);
-
+        field.ChangeCells(cells);
     }
 }

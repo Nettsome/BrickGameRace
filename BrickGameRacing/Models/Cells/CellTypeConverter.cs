@@ -12,7 +12,7 @@ public class CellTypeConverter : IValueConverter
         new SolidColorBrush(value switch
         {
             CellType.Car => Cell.IsActiveField ? Colors.Red : Colors.DarkRed,
-            CellType.Wall => Cell.IsActiveField ? Colors.Gray : Colors.WhiteSmoke,
+            CellType.Wall => Cell.IsActiveField ? Colors.Gray : Colors.LightGray,
             _ => Colors.WhiteSmoke
         });
 

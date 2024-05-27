@@ -24,7 +24,7 @@ public class GameViewModel
 
     public Command StartCommand => _startcommand = _startcommand ?? new(_ => Start(), _ => !_game?.IsActive ?? true);
     public Command MoveCommand => _movecommand ??= new(_ => Move(), _ => !_game?.IsActive ?? true);
-    public Command? StopCommand => _startcommand ??= new(_ => Stop(), _ => !_game?.IsActive ?? true);    
+    public Command? StopCommand => _stopcommand ??= new(_ => Stop(), _ => !_game?.IsActive ?? true);    
 
 
 
@@ -45,7 +45,7 @@ public class GameViewModel
 
     private void Move()
     {
-
+        Field.Move();
     }
 
     private void Stop()

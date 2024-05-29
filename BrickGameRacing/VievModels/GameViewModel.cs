@@ -43,8 +43,6 @@ public class GameViewModel
 
     private void MoveMainCar(object? param)
     {
-        Field.Move();
-
         if (param is Direction dir)
             _game?.MoveMainCar(dir);
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using BrickGameRacing.Models.Cars;
 using BrickGameRacing.Models.Cells;
 using BrickGameRacing.Models.Field;
@@ -12,8 +13,12 @@ namespace BrickGameRacing.VievModels;
 public class GameLogic(Field field)
 {
     public event Action? OnStopGame;
+
     private Cars? cars;
     private List<Cell> LinesCenters = new();
+
+    private Thread? _gamethread;
+    private object _sync = new();
 
     public bool IsActive
     {
@@ -32,6 +37,22 @@ public class GameLogic(Field field)
         IsActive = true;
 
         InitGame();
+
+
+        // Создание потока, в котором будет перемещаться поле и будут генерироваться машинки 
+
+        //_gamethread = new Thread(() =>
+        //{
+        //    while (IsActive)
+        //    {
+        //        // Генерация машины 
+        //        //cars.CreateNewPassingCar();
+        //        field.Move();
+        //        cars.MovePassingCars();
+        //        Thread.Sleep(2000);
+        //    }
+        //});
+        //_gamethread.Start();
     }
 
     private void InitGame()
@@ -56,7 +77,6 @@ public class GameLogic(Field field)
         cars = new(LinesCenters);
 
 
-        //cars.CreateNewCar();
         return cars.AllCells;
     }
 
@@ -68,7 +88,7 @@ public class GameLogic(Field field)
         MovePassingCars();
     }
 
-    public void MovePassingCars()
+    private void MovePassingCars()
      {
         // сделать ограничения, чтобы машина удалялась при выходе из поля видимости
         if (cars.AllCells.Count != 0)
@@ -85,6 +105,31 @@ public class GameLogic(Field field)
 
     private void UpdateField(List<Cell> cells)
     {
-        field.ChangeCells(cells);
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            try
+            {
+                field.ChangeCells(cells);
+            }
+            catch
+            {
+                IsActive = false;
+            }
+        });
+    }
+
+    private void UpdateCarField(List<Cell> cells)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            try
+            {
+                field.ChangeCellsToMoveDown(cells);
+            }
+            catch
+            {
+                IsActive = false;
+            }
+        });
     }
 }

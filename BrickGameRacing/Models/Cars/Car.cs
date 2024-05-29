@@ -14,15 +14,16 @@ namespace BrickGameRacing;
 
 
 // Буду сейчас делать так
-//             0
-//           1 3 2
-//             4
-//           5   6
+//              7
+//           8  0  9
+//           1  3  2
+//           10 4  11
+//           5     6
 
 // может сделать отдельные класс для основной машины и для побочных
 public class Car
 {
-    public Cell[] CarCells = new Cell[7];                                      // Может сделать в виде List<Cell>
+    public Cell[] CarCells = new Cell[12];                                      // Может сделать в виде List<Cell>
     public Cell CenterCell
     {
         get { return CarCells[3]; }
@@ -44,10 +45,6 @@ public class Car
 
     private void AddNew(Cell centerCell)
     {
-        // нужна проверка на выход за границы, которую я пока не знаю как сделать
-        // сделать эту проверку в логике игры
-        // проверяем при создании центральную клетку на выход за границы 
-
         CarCells[3] = new Cell(centerCell, CellType.Car);
         CarCells[0] = new Cell((short)(centerCell.Row - 1), centerCell.Col, CellType.Car);       
         CarCells[1] = new Cell(centerCell.Row, (ushort)(centerCell.Col - 1), CellType.Car);
@@ -55,6 +52,12 @@ public class Car
         CarCells[4] = new Cell((short)(centerCell.Row + 1), centerCell.Col, CellType.Car);
         CarCells[5] = new Cell((short)(centerCell.Row + 2), (ushort)(centerCell.Col - 1), CellType.Car);
         CarCells[6] = new Cell((short)(centerCell.Row + 2), (ushort)(centerCell.Col + 1), CellType.Car);
+
+        CarCells[7] = new Cell((short)(CarCells[0].Row - 1), centerCell.Col);
+        CarCells[8] = new Cell(CarCells[0].Row, (ushort)(centerCell.Col - 1));
+        CarCells[9] = new Cell(CarCells[0].Row, (ushort)(centerCell.Col + 1));
+        CarCells[10] = new Cell(CarCells[4].Row, (ushort)(centerCell.Col - 1));
+        CarCells[11] = new Cell(CarCells[4].Row, (ushort)(centerCell.Col + 1));
     }
 
 

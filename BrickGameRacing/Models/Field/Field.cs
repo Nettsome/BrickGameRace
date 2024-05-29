@@ -120,27 +120,7 @@ public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyCh
         CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
 
-    //  DELETE: ||||||
-    //          \/\/\/
-    public void ChangeCellsToMoveDown(List<Cell> cells)
-    {
-        if (cells.Count == 7)
-        {
-            for (int i  = 0; i < 7; i++)
-            {
-                if (i != 3 && i != 4)
-                    this[cells[i].Row - 1, cells[i].Col].Type = CellType.Empty;
-
-                this[cells[i].Row, cells[i].Col].Type = cells[i].Type;
-            }
-        }
-        CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-    }
-    //          /\/\/\
-    //          ||||||
-
-
-    public void Move()
+    public void MoveBorders()
     {
         List<Cell> bordersmove = new();
         bordersmove.AddRange(leftborder.Move());

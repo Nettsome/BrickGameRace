@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using BrickGameRacing.Models.Cells;
 
 namespace BrickGameRacing.Models.Field;
@@ -63,7 +59,7 @@ public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyCh
         get
         {
             //        \/ подумать над этим
-            if (row < -4 || row >= _rows + 5 || col < 0 || col >= _cols)
+            if (row < -5 || row >= _rows + 5 || col < 0 || col >= _cols)
                 throw new ArgumentOutOfRangeException($"Выход за границу игрового поля");
             return this[(row + 4) * Cols + col];
         }
@@ -91,7 +87,7 @@ public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyCh
     public void Reset()
     {
         Clear();
-        for (short i = -4; i < Rows + 5; i++)
+        for (short i = -5; i < Rows + 5; i++)
         {
             for (ushort j = 0; j < Cols; j++)
             {
@@ -124,15 +120,10 @@ public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyCh
         CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
 
+    //  DELETE: ||||||
+    //          \/\/\/
     public void ChangeCellsToMoveDown(List<Cell> cells)
     {
-        //foreach (var cell in cells.Take(3))
-        //{
-        //    if (cell.Row > -3)
-        //        this[cell.Row - 1, cell.Col].Type = CellType.Empty;
-        //    this[cell.Row, cell.Col].Type = cell.Type;
-        //}
-
         if (cells.Count == 7)
         {
             for (int i  = 0; i < 7; i++)
@@ -142,15 +133,20 @@ public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyCh
 
                 this[cells[i].Row, cells[i].Col].Type = cells[i].Type;
             }
-            
         }
         CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
+    //          /\/\/\
+    //          ||||||
+
 
     public void Move()
     {
-        ChangeCells(leftborder.Move());
-        ChangeCells(rightborder.Move());
+        List<Cell> bordersmove = new();
+        bordersmove.AddRange(leftborder.Move());
+        bordersmove.AddRange(rightborder.Move());
+        
+        ChangeCells(bordersmove);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

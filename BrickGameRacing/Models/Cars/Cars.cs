@@ -10,17 +10,14 @@ namespace BrickGameRacing.Models.Cars;
 
 public class Cars
 {
-    
-    //public static List<Car> cars = new();       // Список всех машин (думаю, лучше перенести в отдельный файл)
-    public static Queue<PassingCar> passingCars = new();
-    public static Car? MainCar;                 // основная машина 
+    public static Queue<PassingCar> passingCars = new();                                    // Оптимизация: может сделать вместо очереди хэш талблицу
+    public static Car? MainCar;                                                             // основная машина 
     public static List<Cell> LinesCenters = new();
 
     private Random _rnd = new();
 
     // может сделать отдельный метод для создания основной машины
     // чтобы основная машина создавалась только внизу
-    // может сделать для нее какой-то флаг
 
 
 
@@ -38,6 +35,10 @@ public class Cars
         //CreateMainCar
     }
 
+    public void CreateMainCar()
+    {
+        // 
+    }
 
     public void CreateNewPassingCar()
     {
@@ -46,8 +47,6 @@ public class Cars
         // Создаем в рандомном месте машинку, так чтобы она не пересекалась с остальными  
         // и так, чтобы основная машина смогла проехать между побочными машинами 
 
-
-
         passingCars.Enqueue(new PassingCar(LinesCenters[_rnd.Next(0, LinesCenters.Count)]));       // временная реализация
 
     }
@@ -55,7 +54,7 @@ public class Cars
     public void MovePassingCars()
     {
         // Сдвигаем одновременно все машинки, кроме своей, вниз 
-        // Сделать проверку пересечения своей машинки с остальными и если она пересекает, то завершаем игру
+        // Сделать проверку пересечения главной машинки с остальными и если она пересекает, то завершаем игру
 
 
         foreach (var car in passingCars)

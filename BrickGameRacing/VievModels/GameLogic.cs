@@ -93,8 +93,10 @@ public class GameLogic(Field field)
         // сделать ограничения, чтобы машина удалялась при выходе из поля видимости
         if (cars.AllCells.Count != 0)
         {
-            cars?.MovePassingCars();
-            field.ChangeCellsToMoveDown(cars.AllCells);
+            //cars?.MovePassingCars();
+            //field.ChangeCellsToMoveDown(cars.AllCells);
+
+            UpdateField(cars.MovePassingCars());
 
             if (cars?.GetFirstCarCenterCell().Row > field.Rows + 1)
             {
@@ -105,31 +107,17 @@ public class GameLogic(Field field)
 
     private void UpdateField(List<Cell> cells)
     {
-        Application.Current.Dispatcher.Invoke(() =>
-        {
-            try
-            {
-                field.ChangeCells(cells);
-            }
-            catch
-            {
-                IsActive = false;
-            }
-        });
-    }
-
-    private void UpdateCarField(List<Cell> cells)
-    {
-        Application.Current.Dispatcher.Invoke(() =>
-        {
-            try
-            {
-                field.ChangeCellsToMoveDown(cells);
-            }
-            catch
-            {
-                IsActive = false;
-            }
-        });
+        //Application.Current.Dispatcher.Invoke(() =>
+        //{
+        //    try
+        //    {
+        //        field.ChangeCells(cells);
+        //    }
+        //    catch
+        //    {
+        //        IsActive = false;
+        //    }
+        //});
+        field.ChangeCells(cells);
     }
 }

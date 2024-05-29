@@ -51,16 +51,20 @@ public class Cars
 
     }
 
-    public void MovePassingCars()
+    public List<Cell> MovePassingCars()                   // TODO: может тоже сделать не void, а List
     {
         // Сдвигаем одновременно все машинки, кроме своей, вниз 
         // Сделать проверку пересечения главной машинки с остальными и если она пересекает, то завершаем игру
 
+        List<Cell> movedCars = new();
 
         foreach (var car in passingCars)
         {
             car.Move();
+            movedCars.AddRange(car.CarCells);
         }
+
+        return movedCars;
     }
 
     public Cell GetFirstCarCenterCell()         // rename

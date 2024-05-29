@@ -61,7 +61,7 @@ public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyCh
             //        \/ подумать над этим
             if (row < -5 || row >= _rows + 5 || col < 0 || col >= _cols)
                 throw new ArgumentOutOfRangeException($"Выход за границу игрового поля");
-            return this[(row + 4) * Cols + col];
+            return this[(row + 5) * Cols + col];
         }
     }
 

@@ -23,11 +23,11 @@ namespace BrickGameRacing;
 // может сделать отдельные класс для основной машины и для побочных
 public class Car
 {
-    public Cell[] CarCells = new Cell[12];                                      // Может сделать в виде List<Cell>
+    protected Cell[] carCells = new Cell[12];                                      // Может сделать в виде List<Cell>
     public Cell CenterCell
     {
-        get { return CarCells[3]; }
-        private set { CarCells[3] = value;}
+        get { return carCells[3]; }
+        private set { carCells[3] = value;}
     }
 
     
@@ -45,21 +45,25 @@ public class Car
 
     private void AddNew(Cell centerCell)
     {
-        CarCells[3] = new Cell(centerCell, CellType.Car);
-        CarCells[0] = new Cell((short)(centerCell.Row - 1), centerCell.Col, CellType.Car);       
-        CarCells[1] = new Cell(centerCell.Row, (ushort)(centerCell.Col - 1), CellType.Car);
-        CarCells[2] = new Cell(centerCell.Row, (ushort)(centerCell.Col + 1), CellType.Car);
-        CarCells[4] = new Cell((short)(centerCell.Row + 1), centerCell.Col, CellType.Car);
-        CarCells[5] = new Cell((short)(centerCell.Row + 2), (ushort)(centerCell.Col - 1), CellType.Car);
-        CarCells[6] = new Cell((short)(centerCell.Row + 2), (ushort)(centerCell.Col + 1), CellType.Car);
+        carCells[3] = new Cell(centerCell, CellType.Car);
+        carCells[0] = new Cell((short)(centerCell.Row - 1), centerCell.Col, CellType.Car);       
+        carCells[1] = new Cell(centerCell.Row, (ushort)(centerCell.Col - 1), CellType.Car);
+        carCells[2] = new Cell(centerCell.Row, (ushort)(centerCell.Col + 1), CellType.Car);
+        carCells[4] = new Cell((short)(centerCell.Row + 1), centerCell.Col, CellType.Car);
+        carCells[5] = new Cell((short)(centerCell.Row + 2), (ushort)(centerCell.Col - 1), CellType.Car);
+        carCells[6] = new Cell((short)(centerCell.Row + 2), (ushort)(centerCell.Col + 1), CellType.Car);
 
-        CarCells[7] = new Cell((short)(CarCells[0].Row - 1), centerCell.Col);
-        CarCells[8] = new Cell(CarCells[0].Row, (ushort)(centerCell.Col - 1));
-        CarCells[9] = new Cell(CarCells[0].Row, (ushort)(centerCell.Col + 1));
-        CarCells[10] = new Cell(CarCells[4].Row, (ushort)(centerCell.Col - 1));
-        CarCells[11] = new Cell(CarCells[4].Row, (ushort)(centerCell.Col + 1));
+        carCells[7] = new Cell((short)(carCells[0].Row - 1), centerCell.Col);
+        carCells[8] = new Cell(carCells[0].Row, (ushort)(centerCell.Col - 1));
+        carCells[9] = new Cell(carCells[0].Row, (ushort)(centerCell.Col + 1));
+        carCells[10] = new Cell(carCells[4].Row, (ushort)(centerCell.Col - 1));
+        carCells[11] = new Cell(carCells[4].Row, (ushort)(centerCell.Col + 1));
     }
 
 
-
+    public Cell[] CarCells
+    {
+        get => carCells;
+        protected set => carCells = value;
+    }
 }

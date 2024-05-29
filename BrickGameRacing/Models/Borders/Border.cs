@@ -35,7 +35,7 @@ public class Borders
 
     private void Create()
     {
-        for (ushort i = 0; i < BorderLength; i++)
+        for (short i = 0; i < BorderLength; i++)
         {
             Walls[i] = new(i, Position);
 

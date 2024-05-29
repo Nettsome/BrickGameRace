@@ -13,6 +13,7 @@ public class GameLogic(Field field)
 {
     public event Action? OnStopGame;
     private Cars? cars;
+    private List<Cell> LinesCenters = new();
 
     public bool IsActive
     {
@@ -37,15 +38,49 @@ public class GameLogic(Field field)
     {
         IsActive = true;
 
+        InitLines();
         UpdateField(InitCars());
+    }
+
+    private void InitLines()
+    {
+        LinesCenters.Clear();
+
+        LinesCenters.Add(new Cell(-3, 3));
+        LinesCenters.Add(new Cell(-3, 6));
     }
 
     private List<Cell> InitCars()
     {
         // Временная функция
-        cars = new();
-        cars.CreateNewCar();
+        cars = new(LinesCenters);
+
+
+        //cars.CreateNewCar();
         return cars.AllCells;
+    }
+
+    public void MoveMainCar(Direction dir)
+    {
+        // если существует главная машина, то передвигаем ее
+
+        // Временно 
+        MovePassingCars();
+    }
+
+    public void MovePassingCars()
+     {
+        // сделать ограничения, чтобы машина удалялась при выходе из поля видимости
+        if (cars.AllCells.Count != 0)
+        {
+            cars?.MovePassingCars();
+            field.ChangeCellsToMoveDown(cars.AllCells);
+
+            if (cars?.GetFirstCarCenterCell().Row > field.Rows + 1)
+            {
+                cars?.Dequeue();
+            }
+        }
     }
 
     private void UpdateField(List<Cell> cells)

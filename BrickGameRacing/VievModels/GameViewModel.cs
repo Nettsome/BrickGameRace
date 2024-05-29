@@ -23,17 +23,15 @@ public class GameViewModel
     private GameLogic? _game;
 
     public Command StartCommand => _startcommand = _startcommand ?? new(_ => Start(), _ => !_game?.IsActive ?? true);
-    public Command MoveCommand => _movecommand ??= new(_ => Move(), _ => !_game?.IsActive ?? true);
-    public Command? StopCommand => _stopcommand ??= new(_ => Stop(), _ => !_game?.IsActive ?? true);    
+    public Command MoveCommand => _movecommand ??= new(MoveMainCar, _ => _game?.IsActive ?? false);
+    public Command? StopCommand => _stopcommand ??= new(_ => Stop(), _ => _game?.IsActive ?? false);    
 
 
-
+    
 
     public GameViewModel()
     {
         Field = new(_rows, _cols);
-
-        
     }
 
     private void Start()
@@ -43,9 +41,12 @@ public class GameViewModel
         _game.Start();
     }
 
-    private void Move()
+    private void MoveMainCar(object? param)
     {
         Field.Move();
+
+        if (param is Direction dir)
+            _game?.MoveMainCar(dir);
     }
 
     private void Stop()

@@ -21,7 +21,7 @@ public class PassingCar(Cell centerCell) : Car(centerCell)
 
 
 
-    public void Move()
+    public void Move()              // TODO: может сделать не void, а List<Cell>. Нет, т.к. в этом методе мы только изменяем значение каждой клетки
     {
         foreach (var cell in CarCells)
         {

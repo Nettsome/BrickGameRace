@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BrickGameRacing.Models.Cells;
 
-public class Cell(ushort row, ushort col, CellType type = CellType.Empty)
+public class Cell(short row, ushort col, CellType type = CellType.Empty)
 {
-    public ushort Row { get => row; set => row = value; }
+    public short Row { get => row; set => row = value; }
     public ushort Col { get => col; set => col = value; }
     public CellType Type { get => type; set => type = value; }
     public static bool IsActiveField { get; set; } = false;

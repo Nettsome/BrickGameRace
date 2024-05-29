@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace BrickGameRacing.Models.Cells;
 
-public class CellInfo(ushort row, ushort col) : Cell(row, col)
+public class CellInfo(short row, ushort col) : Cell(row, col)
 {
     public int Left { get; set; }       // отступ от левого края канваса
     public int Top { get; set; }        // отступ от верхнего края канваса

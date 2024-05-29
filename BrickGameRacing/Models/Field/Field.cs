@@ -62,9 +62,10 @@ public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyCh
     {
         get
         {
-            if (row < 0 || row >= _rows || col < 0 || col >= _cols)
+            //        \/ подумать над этим
+            if (row < -4 || row >= _rows + 5 || col < 0 || col >= _cols)
                 throw new ArgumentOutOfRangeException($"Выход за границу игрового поля");
-            return this[row * Cols + col];
+            return this[(row + 4) * Cols + col];
         }
     }
 
@@ -90,7 +91,7 @@ public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyCh
     public void Reset()
     {
         Clear();
-        for (ushort i = 0; i < Rows; i++)
+        for (short i = -4; i < Rows + 5; i++)
         {
             for (ushort j = 0; j < Cols; j++)
             {
@@ -119,6 +120,29 @@ public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyCh
         foreach (var cell in cells)
         {
             this[cell.Row, cell.Col].Type = cell.Type;
+        }
+        CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+    }
+
+    public void ChangeCellsToMoveDown(List<Cell> cells)
+    {
+        //foreach (var cell in cells.Take(3))
+        //{
+        //    if (cell.Row > -3)
+        //        this[cell.Row - 1, cell.Col].Type = CellType.Empty;
+        //    this[cell.Row, cell.Col].Type = cell.Type;
+        //}
+
+        if (cells.Count == 7)
+        {
+            for (int i  = 0; i < 7; i++)
+            {
+                if (i != 3 && i != 4)
+                    this[cells[i].Row - 1, cells[i].Col].Type = CellType.Empty;
+
+                this[cells[i].Row, cells[i].Col].Type = cells[i].Type;
+            }
+            
         }
         CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }

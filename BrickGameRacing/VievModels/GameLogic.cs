@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,18 +42,27 @@ public class GameLogic(Field field)
 
         // Создание потока, в котором будет перемещаться поле и будут генерироваться машинки 
 
-        //_gamethread = new Thread(() =>
-        //{
-        //    while (IsActive)
-        //    {
-        //        // Генерация машины 
-        //        //cars.CreateNewPassingCar();
-        //        field.Move();
-        //        cars.MovePassingCars();
-        //        Thread.Sleep(2000);
-        //    }
-        //});
-        //_gamethread.Start();
+        _gamethread = new Thread(() =>
+        {
+            short movecounter = 0;
+            while (IsActive)
+            {
+                //// Генерация машины 
+                ////cars.CreateNewPassingCar();
+
+                if (movecounter > 4)
+                {
+                    movecounter = 0;
+                    cars?.CreateNewPassingCar();
+                }
+
+                UpdateField(NextMove());                     
+
+                Thread.Sleep(300);
+                movecounter++;
+            }
+        });
+        _gamethread.Start();
     }
 
     private void InitGame()
@@ -76,7 +86,6 @@ public class GameLogic(Field field)
         // Временная функция
         cars = new(LinesCenters);
 
-
         return cars.AllCells;
     }
 
@@ -85,39 +94,54 @@ public class GameLogic(Field field)
         // если существует главная машина, то передвигаем ее
 
         // Временно 
+        field.MoveBorders();
         MovePassingCars();
     }
 
-    private void MovePassingCars()
-     {
-        // сделать ограничения, чтобы машина удалялась при выходе из поля видимости
+    private List<Cell> MovePassingCars()          // сделать вывод в виде List<Cell>
+    {
+        List<Cell> movedCars = new();
         if (cars.AllCells.Count != 0)
         {
-            //cars?.MovePassingCars();
-            //field.ChangeCellsToMoveDown(cars.AllCells);
-
-            UpdateField(cars.MovePassingCars());
+            movedCars.AddRange(cars.MovePassingCars());
 
             if (cars?.GetFirstCarCenterCell().Row > field.Rows + 1)
             {
                 cars?.Dequeue();
             }
         }
+
+        return movedCars;
+    }
+
+
+    private List<Cell> NextMove()           // нужен для одновременной работы генерации машин и передвижения стен и машин
+    { 
+        List<Cell> nextMove = new();
+
+        lock (_sync)
+        {
+            // Генерация машины
+            //cars?.CreateNewPassingCar();
+            nextMove.AddRange(field.MoveBorders());
+            nextMove.AddRange(MovePassingCars());
+        }
+
+        return nextMove;
     }
 
     private void UpdateField(List<Cell> cells)
     {
-        //Application.Current.Dispatcher.Invoke(() =>
-        //{
-        //    try
-        //    {
-        //        field.ChangeCells(cells);
-        //    }
-        //    catch
-        //    {
-        //        IsActive = false;
-        //    }
-        //});
-        field.ChangeCells(cells);
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            try
+            {
+                field.ChangeCells(cells);
+            }
+            catch
+            {
+                IsActive = false;
+            }
+        });
     }
 }

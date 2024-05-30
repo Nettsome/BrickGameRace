@@ -10,7 +10,7 @@ namespace BrickGameRacing.Models.Cars;
 
 public class Cars
 {
-    public static Queue<PassingCar> passingCars = new();                                    // Оптимизация: может сделать вместо очереди хэш талблицу
+    public static Queue<PassingCar> passingCars = new();                                    // Оптимизация: может сделать вместо очереди хэш таблицу
     public static Car? MainCar;                                                             // основная машина 
     public static List<Cell> LinesCenters = new();
 
@@ -47,8 +47,38 @@ public class Cars
         // Создаем в рандомном месте машинку, так чтобы она не пересекалась с остальными  
         // и так, чтобы основная машина смогла проехать между побочными машинами 
 
-        passingCars.Enqueue(new PassingCar(LinesCenters[_rnd.Next(0, LinesCenters.Count)]));       // временная реализация
+        var line = LinesCenters[_rnd.Next(0, LinesCenters.Count)];
 
+        if (CanCreatePassingCar(line))
+        {
+            passingCars.Enqueue(new PassingCar(line));
+        }
+
+        //passingCars.Enqueue(new PassingCar(LinesCenters[_rnd.Next(0, LinesCenters.Count)]));       // временная реализация
+
+    }
+
+    private bool CanCreatePassingCar(Cell line)
+    {
+        // Если полос движения будет больше двух, то эта логика может не работать
+        if (passingCars.Count == 0)
+            return true;
+
+        //var lastcar = passingCars.Peek();
+        var lastcar = passingCars.Last();
+
+
+        if (lastcar.CenterCell.Col == line.Col)
+        {
+            if (lastcar.CenterCell.Row - line.Row > 4)
+                return true;
+        }
+        else
+        {
+            if (lastcar.CenterCell.Row - line.Row > 8)
+                return true;
+        }
+        return false;
     }
 
     public List<Cell> MovePassingCars()                   // TODO: может тоже сделать не void, а List

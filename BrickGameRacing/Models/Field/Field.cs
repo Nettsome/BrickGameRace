@@ -120,13 +120,14 @@ public class Field : List<CellInfo>, INotifyCollectionChanged, INotifyPropertyCh
         CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
 
-    public void MoveBorders()
+    public List<Cell> MoveBorders()
     {
         List<Cell> bordersmove = new();
         bordersmove.AddRange(leftborder.Move());
         bordersmove.AddRange(rightborder.Move());
         
-        ChangeCells(bordersmove);
+        //ChangeCells(bordersmove);
+        return bordersmove;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

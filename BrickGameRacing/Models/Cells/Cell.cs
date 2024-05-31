@@ -28,11 +28,6 @@ public class Cell(short row, ushort col, CellType type = CellType.Empty)
     {
         return HashCode.Combine(Row.GetHashCode(), Col.GetHashCode());
     }
-
-    public void ChangePosition(ushort row, ushort col)
-    {
-
-    }
 }
 
 public enum CellType

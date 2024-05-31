@@ -13,14 +13,13 @@ namespace BrickGameRacing.VievModels;
 
 public class GameLogic(Field field)
 {
-    public event Action? OnStopGame;
-
     private Cars? cars;
     private List<Cell> LinesCenters = new();
 
     private Thread? _gamethread;
     private object _sync = new();
 
+    public event Action? OnStopGame;
     public bool IsActive
     {
         get => Cell.IsActiveField;
@@ -40,15 +39,11 @@ public class GameLogic(Field field)
         InitGame();
 
 
-        // Создание потока, в котором будет перемещаться поле и будут генерироваться машинки 
-
         _gamethread = new Thread(() =>
         {
             short movecounter = 0;
             while (IsActive)
             {
-                //// Генерация машины 
-                ////cars.CreateNewPassingCar();
 
                 if (movecounter > 4)
                 {
@@ -93,15 +88,16 @@ public class GameLogic(Field field)
     {
         // если существует главная машина, то передвигаем ее
 
-        // Временно 
-        field.MoveBorders();
-        MovePassingCars();
+        if (!IsActive || cars == null)
+            return;
+
+        // Передвигаем UpdateField(cars?.MoveMainCar());
     }
 
-    private List<Cell> MovePassingCars()          // сделать вывод в виде List<Cell>
+    private List<Cell> MovePassingCars()          
     {
         List<Cell> movedCars = new();
-        if (cars.AllCells.Count != 0)
+        if (Cars.passingCars.Count != 0)
         {
             movedCars.AddRange(cars.MovePassingCars());
 
@@ -121,10 +117,11 @@ public class GameLogic(Field field)
 
         lock (_sync)
         {
-            // Генерация машины
-            //cars?.CreateNewPassingCar();
+
             nextMove.AddRange(field.MoveBorders());
             nextMove.AddRange(MovePassingCars());
+            // 
+            // Проверка на соприкосновение с основной машиной
         }
 
         return nextMove;

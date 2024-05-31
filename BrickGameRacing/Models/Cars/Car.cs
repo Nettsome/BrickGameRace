@@ -13,35 +13,37 @@ namespace BrickGameRacing;
 /// 
 
 
-// Буду сейчас делать так
-//              7
-//           8  0  9
-//           1  3  2
-//           10 4  11
-//           5     6
 
-// может сделать отдельные класс для основной машины и для побочных
+
 public class Car
 {
-    protected Cell[] carCells = new Cell[12];                                      // Может сделать в виде List<Cell>
+    protected Cell[] carCells = new Cell[12];                                      
+
     public Cell CenterCell
     {
         get { return carCells[3]; }
         private set { carCells[3] = value;}
     }
 
-    
+
     // The center of the car is in the 3th position in array
     //             0
     //           1 3 2
     //             4
     //           5   6
+    // 
+    //              7
+    //           8  0  9
+    //           1  3  2
+    //           10 4  11
+    //           5     6
 
 
     public Car(Cell centerCell)
     {
         AddNew(centerCell);
     }
+
 
     private void AddNew(Cell centerCell)
     {
@@ -60,10 +62,19 @@ public class Car
         carCells[11] = new Cell(carCells[4].Row, (ushort)(centerCell.Col + 1));
     }
 
+    public void CloneTo(Car car, CellType carType = CellType.Car)
+    {
+        var cloneCells = car.CarCells;
+
+        for (short i = 0; i < 12; ++i)
+        {
+            cloneCells[i] = new(CarCells[i], carType);        // Проверить на жор памяти
+        }
+    }
+
 
     public Cell[] CarCells
     {
         get => carCells;
-        protected set => carCells = value;
     }
 }

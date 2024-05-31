@@ -10,8 +10,9 @@ namespace BrickGameRacing.Models.Cars;
 
 public class Cars
 {
-    public static Queue<PassingCar> passingCars = new();                                    // Оптимизация: может сделать вместо очереди хэш таблицу
-    public static Car? MainCar;                                                             // основная машина 
+    public static Queue<PassingCar> passingCars = new();                                    // Оптимизация?: может сделать вместо очереди хэш таблицу
+    public static MainCar? MainCar;                                                          // основная машина 
+    private static List<Cell> MainCarPositions = new();
     public static List<Cell> LinesCenters = new();
 
     private Random _rnd = new();
@@ -21,29 +22,47 @@ public class Cars
 
 
 
-    public Cars(List<Cell> centers)
+    public Cars(List<Cell> linescenters)
     {
-        // метод создания главной машины
-        // задание центров для каждой полосы
-
-        foreach (var cell in centers)
+        foreach (var cell in linescenters)
         {
             LinesCenters.Add(cell);
+            MainCarPositions.Add(new Cell((short)(cell.Row + 20), cell.Col));           // Переделать это как-нибудь. Если у нас измениться кол-во строк, то этот код не будет работать
         }
 
         CreateNewPassingCar();
-        //CreateMainCar
+        CreateMainCar();
     }
 
-    public void CreateMainCar()
+ //===================================================================================================================================================================================
+
+
+    private void CreateMainCar()
     {
-        // 
+        // Сделать одну машину и постоянно ее двигать и затирать прошлое положение
+
+        if (MainCar != null)
+            return;
+
+        MainCar = new(MainCarPositions[0]);
     }
+
+    public List<Cell> MoveMainCar(Direction dir)
+    {
+
+        MainCar.MoveTo(new Cell(LinesCenters[0]));
+
+
+        return MainCar.Cells;
+    }
+
+
+
+ //===================================================================================================================================================================================
+
 
     public void CreateNewPassingCar()
     {
-        // сделать ограничение, чтобы машины создавались на какой-то из двух полос дороги и нигде больше
-
         // Создаем в рандомном месте машинку, так чтобы она не пересекалась с остальными  
         // и так, чтобы основная машина смогла проехать между побочными машинами 
 
@@ -53,9 +72,6 @@ public class Cars
         {
             passingCars.Enqueue(new PassingCar(line));
         }
-
-        //passingCars.Enqueue(new PassingCar(LinesCenters[_rnd.Next(0, LinesCenters.Count)]));       // временная реализация
-
     }
 
     private bool CanCreatePassingCar(Cell line)
@@ -63,8 +79,7 @@ public class Cars
         // Если полос движения будет больше двух, то эта логика может не работать
         if (passingCars.Count == 0)
             return true;
-
-        //var lastcar = passingCars.Peek();
+;
         var lastcar = passingCars.Last();
 
 
@@ -81,9 +96,8 @@ public class Cars
         return false;
     }
 
-    public List<Cell> MovePassingCars()                   // TODO: может тоже сделать не void, а List
+    public List<Cell> MovePassingCars()                   
     {
-        // Сдвигаем одновременно все машинки, кроме своей, вниз 
         // Сделать проверку пересечения главной машинки с остальными и если она пересекает, то завершаем игру
 
         List<Cell> movedCars = new();
@@ -116,7 +130,7 @@ public class Cars
         {
             List<Cell> list = new();
 
-            //list.AddRange(MainCar.CarCells);
+            list.AddRange(MainCar.CarCells);
 
             foreach (Car car in passingCars) 
             {
